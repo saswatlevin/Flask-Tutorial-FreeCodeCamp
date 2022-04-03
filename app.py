@@ -1,12 +1,39 @@
-from flask import Flask
+from crypt import methods
+from flask import Flask # The flask framework
+from flask import render_template # To render web page files
+from flask import url_for # To get the path of files
+from flask_sqlalchemy import SQLAlchemy # For CRUD operations on the database
+from datetime import datetime # For storing dates and times in the database
+
 # The flask app
 app = Flask(__name__)
+# Tells SQLAlchemy where the database is located (path of the database) 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+# To create an SqlAlchemy database
+db = SQLAlchemy(app)
+
+# Todo relation in sqlite database
+# Inherits from class Model of db
+class Todo(db.Model):
+    # Each variable is a column
+    id = db.Column(db.Integer, primary_key = True)
+    # Nullable is NOT NULL, String is VARCHAR
+    content = db.Column(db.String(200), nullable = False)
+    completed = db.Column(db.Integer, default = 0)
+    # Datetime will automatically be set to the UTC timezone
+    date_created = db.Column(db.DateTime, default = datetime.utcnow)
+    
+    # Used to represent an object of class Todo as a string
+    # Will return 'Task <id>' as a string
+    def __repr__(self):
+        return '<Task %r>' % self.id
 
 # URL for index()
 # Returns web resource (such as a web page)
-@app.route('/')
+# Added HTTP methods
+@app.route('/', methods = ['GET', 'POST'])
 def index():
-    return "Hello, World!"
+    return render_template('index.html')
 
 # Main function to run the app
 if __name__ == "__main__":
