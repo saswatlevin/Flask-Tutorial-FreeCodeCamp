@@ -8,3 +8,19 @@ Package Requirements:
 pip3 install flask
 pip3 install flask-sqlalchemy
 
+1. Template Inheritance: Write the skeleton of a template (in my case, index.html)
+and then use it in subsequent templates.
+
+2. {% block head %} {% endblock %}. This is Jinja2 Template Syntax to be able to substitute
+code in the block shown here. The substitution takes place in the child template.
+
+3. The Jinja2 syntax used in 2 is used for things like for-loops, if-else stmts,etc.
+
+4. "{{}}" is used to get the results of strings.
+
+5. url_for('main_folder_name', filename = 'path_to_file') used to get file paths.
+
+6. 'sqlite:///path_here' with 3 fwd slashes is a relative path. 'sqlite:////path_here' with 4 fwd slashes
+is an absolute path.
+
+7. db.create_all() is used to create the sqlite database on flask. It is done only once.
