@@ -1,0 +1,10 @@
+===============================MY NOTES===================================
+To activate Virtual Environment: source env/bin/activate
+
+Package Requirements:
+1. Flask
+2. Flask-SqlAlchemy
+
+pip3 install flask
+pip3 install flask-sqlalchemy
+
