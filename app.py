@@ -1,8 +1,9 @@
 from crypt import methods
-from flask import Flask # The flask framework
+from flask import Flask, redirect # The flask framework
 from flask import render_template # To render web page files
 from flask import url_for # To get the path of files
 from flask_sqlalchemy import SQLAlchemy # For CRUD operations on the database
+from flask import request # To handle HTTP requests
 from datetime import datetime # For storing dates and times in the database
 
 # The flask app
@@ -33,7 +34,30 @@ class Todo(db.Model):
 # Added HTTP methods
 @app.route('/', methods = ['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    
+    if request.method == 'POST':
+        # Code to do things when Add Task is pressed
+        # Processes the POST requests of the form named "content"
+        task_content = request.form['content']
+        
+        # Created an object of type Todo and
+        # put the content of the form called "content"
+        # in that object
+        new_task = Todo(content = task_content)
+
+        # Code to add tuples to Todo relation
+        try:
+            db.session.add(new_task)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return"Error in adding item to database"
+    
+    else:
+        # SELECT * FROM Todo ORDER BY date_created;
+        tasks = Todo.query.order_by(Todo.date_created).all()
+        # Pass query output to the template
+        return render_template('index.html', tasks = tasks)
 
 # Main function to run the app
 if __name__ == "__main__":
