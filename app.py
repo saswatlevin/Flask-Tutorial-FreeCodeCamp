@@ -59,6 +59,37 @@ def index():
         # Pass query output to the template
         return render_template('index.html', tasks = tasks)
 
+# Deletion logic
+@app.route('/delete/<int:id>')
+def delete(id):
+    # Get the task to be deleted through id
+    task_to_delete = Todo.query.get_or_404(id)
+
+    # Delete the task
+    try:
+        db.session.delete(task_to_delete)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return "Error in deleting task"
+
+# Updation logic
+@app.route('/update/<int:id>', methods = ['GET', 'POST'])
+def update(id):
+    # Get the task to be updated by task id
+    task = Todo.query.get_or_404(id)
+    if request.method == 'POST':
+        task.content = request.form['content']
+        
+        try:
+            db.session.commit()
+            return redirect('/')
+        except:
+            return "Error updating task"
+
+    else:
+        return render_template('update.html', task = task)
+
 # Main function to run the app
 if __name__ == "__main__":
     # Call to run the app
